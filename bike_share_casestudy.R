@@ -1,5 +1,4 @@
-# Environment set up using get() and set()
-
+# Environment set up
 
 ## Step2 - Prepare Phase
 
@@ -105,7 +104,7 @@ str(full_year)
 glimpse(full_year)
 summary(full_year)
 
-# Creating duplicate data frame
+# Creating duplicate/new data frame
 
 yearly_bike_data <- full_year 
 glimpse(yearly_bike_data)
@@ -162,12 +161,12 @@ summary(yearly_bike_data)
 
 # Checking and Removing null values in data
 
-sum(is.na(yearly_bike_data)) # 14461138
+sum(is.na(yearly_bike_data)) # 3267133
 yearly_bike_data <- drop_na(yearly_bike_data)
 
 # Inspecting data frame for inconsistencies
 
-dim(yearly_bike_data) # 137889       9
+dim(yearly_bike_data) # 4615748       9
 glimpse(yearly_bike_data)
 summary(yearly_bike_data)
 
@@ -178,7 +177,7 @@ yearly_bike_data <- yearly_bike_data[complete.cases(yearly_bike_data),]
 
 # Inspecting data frame for inconsistencies
 
-dim(yearly_bike_data) # 137889       9
+dim(yearly_bike_data) # 4615748       9
 glimpse(yearly_bike_data)
 summary(yearly_bike_data)
 
@@ -190,7 +189,7 @@ yearly_bike_data <- full_year1
 
 # Inspecting data frame for inconsistencies
 
-dim(yearly_bike_data) # 137889       9
+dim(yearly_bike_data) # 4615714    9
 glimpse(yearly_bike_data)
 summary(yearly_bike_data)
 
@@ -216,7 +215,7 @@ yearly_bike_data <- yearly_bike_data %>%
 
 # Inspecting data frame for inconsistencies
 
-dim(yearly_bike_data) # 136868       9
+dim(yearly_bike_data) # 136864      9
 head(yearly_bike_data)
 glimpse(yearly_bike_data)
 
@@ -228,7 +227,7 @@ skimr::skim_without_charts(yearly_bike_data)
 
 nrow(yearly_bike_data)
 ncol(yearly_bike_data)
-dim(yearly_bike_data) # 136868       9
+dim(yearly_bike_data) # 136864      9
 colnames(yearly_bike_data)
 head(yearly_bike_data)
 tail(yearly_bike_data)
@@ -249,7 +248,7 @@ yearly_bike_data$ride_length <-
 
 # Inspecting data frame for inconsistencies
 
-dim(yearly_bike_data) # 136868      12
+dim(yearly_bike_data) # 136864     10
 glimpse(yearly_bike_data)
 summary(yearly_bike_data)
 
@@ -264,9 +263,11 @@ nrow(yearly_bike_data)
 # Removing negative ride_length
 
 yearly_bike_data <- yearly_bike_data[!( yearly_bike_data$ride_length <= 0),]
-dim(yearly_bike_data) # 136868      12
+dim(yearly_bike_data) # 136864     10
 glimpse(yearly_bike_data)
 summary(yearly_bike_data)
+
+#yearly_bike_data$date <- as.Date(yearly_bike_data$start_time) 
 
 # Split start_time into date and time
 
@@ -278,7 +279,7 @@ yearly_bike_data <- yearly_bike_data %>%
 
 # Inspecting data frame for inconsistencies
 
-dim(yearly_bike_data) # 136868       11
+dim(yearly_bike_data) # 136864      12
 head(yearly_bike_data)
 glimpse(yearly_bike_data)
 
@@ -320,7 +321,7 @@ yearly_bike_data$season <-
 
 # Inspecting data frame for inconsistencies
 
-dim(yearly_bike_data) # 136868      18
+dim(yearly_bike_data) # 136864     17
 colnames(yearly_bike_data)
 str(yearly_bike_data)
 glimpse(yearly_bike_data)
@@ -347,11 +348,11 @@ yearly_bike_data <- yearly_bike_data %>%
                      hour == "20" ~ "Evening", hour == "21" ~ "Evening",                                 
                      hour == "22" ~ "Evening",  hour == "23" ~ "Evening") 
   )
-                                                       
+
 # Inspecting data frame for inconsistencies
 
 colnames(yearly_bike_data)
-dim(yearly_bike_data) # 136868     19
+dim(yearly_bike_data) # 136864    19
 glimpse(yearly_bike_data)
 
 # Checking for test station
@@ -368,10 +369,6 @@ skim(yearly_bike_data)
 
 ## Step4 - Analyse Phase
 
-# Summary statistics for ride_length
-
-summary(yearly_bike_data$ride_length)
-
 # Descriptive analysis
 
 mean(yearly_bike_data$ride_length) # straight average
@@ -379,12 +376,10 @@ median(yearly_bike_data$ride_length) # midpoint in array of ride_length
 max(yearly_bike_data$ride_length) # longest ride
 min(yearly_bike_data$ride_length) # shortest ride
 
-# Compare user_type
+# Summary statistics for ride_length
 
-aggregate(yearly_bike_data$ride_length ~ yearly_bike_data$user_type, FUN = mean)
-aggregate(yearly_bike_data$ride_length ~ yearly_bike_data$user_type, FUN = median)
-aggregate(yearly_bike_data$ride_length ~ yearly_bike_data$user_type, FUN = max)
-aggregate(yearly_bike_data$ride_length ~ yearly_bike_data$user_type, FUN = min)
+summary(yearly_bike_data$ride_length)
+
 
 # summary of yearly_bike_data by user_type
 
@@ -397,7 +392,21 @@ yearly_bike_data %>%
             total_trips = n()) %>%
   arrange(-total_trips)
 
+# View the final data
+
+View(yearly_bike_data)
+
+#-----------------------------------------TOTAL RIDES--------------------------------------
+
+# Total number of rides
+
+nrow(yearly_bike_data)
+
 # User trends
+
+#-----------------MEMBER TYPE---------------------
+
+# Total rides by user_type
 
 yearly_bike_data %>% 
   group_by(user_type) %>%
@@ -410,6 +419,216 @@ yearly_bike_data %>%
   summarise(number_of_rides = n(),
             average_ride_length = mean(ride_length), .groups = "drop")
 
+# Analysis in percentage
+
+yearly_bike_data %>% 
+  group_by(user_type) %>%
+  summarise(count = length(trip_id),
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100)
+
+#----------------TYPE OF BIKE---------------------
+
+# Total rides by ride_type
+
+yearly_bike_data %>%
+  group_by(ride_type) %>% 
+  count(ride_type)
+
+# Average duration by ride_type
+
+yearly_bike_data %>%
+  group_by(ride_type) %>%
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop",
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100)
+
+# Total rides by user_type and ride_type
+
+yearly_bike_data %>%
+  group_by(user_type, ride_type) %>% 
+  count(ride_type)
+
+# Average duration by user_type and ride_type
+
+yearly_bike_data %>%
+  group_by(user_type, ride_type) %>%
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop",
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100) %>%
+  arrange(user_type, ride_type)
+
+#-------------------HOUR--------------------------
+
+# Total rides by hour
+
+yearly_bike_data %>%
+  count(hour) %>% 
+  print(n = 24) #lets you view the entire tibble
+
+# Average duration by hour
+
+yearly_bike_data %>%
+  group_by(hour) %>%
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length),
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100) %>%
+  print(n = 24)
+
+# Total rides by user_type 
+
+yearly_bike_data %>%
+  group_by(user_type) %>% 
+  count(hour) %>% 
+  print(n = 48) #lets you view the entire tibble
+
+# Average duration by user_type and hour
+
+yearly_bike_data %>%
+  group_by(user_type, hour) %>%
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop",
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100) %>%
+  arrange(user_type, hour) %>%
+  print(n = 48)
+
+#----------------------TIME OF DAY-----------------------
+
+#---all times of day----
+
+# Number of rides by time_of_day
+
+yearly_bike_data %>%
+  group_by(time_of_day) %>% 
+  count(time_of_day)
+
+# Average duration by time_of_day
+
+yearly_bike_data %>%
+  group_by(time_of_day) %>%
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length),
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100)
+
+# Total rides by user_type
+
+yearly_bike_data %>%
+  group_by(user_type) %>% 
+  count(time_of_day)
+
+# Average duration by user_type and time_of_day
+
+yearly_bike_data %>%
+  group_by(user_type, time_of_day) %>%
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop",
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100) %>%
+  arrange(user_type, time_of_day)
+
+#-----morning-------
+
+yearly_bike_data %>%
+  filter(time_of_day == "Morning") %>% 
+  count(time_of_day)
+
+# Average duration by time_of_day
+
+yearly_bike_data %>%
+  group_by(time_of_day) %>%
+  filter(time_of_day == "Morning") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length),
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100)
+
+yearly_bike_data %>%
+  group_by(user_type) %>% 
+  filter(time_of_day == "Morning") %>% 
+  count(time_of_day)
+
+# Average duration by user_type and time_of_day
+
+yearly_bike_data %>%
+  group_by(user_type, time_of_day) %>%
+  filter(time_of_day == "Morning") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop",
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100) %>%
+  arrange(user_type, time_of_day)
+
+#-----afternoon-------
+
+yearly_bike_data %>%
+  group_by(time_of_day) %>%
+  filter(time_of_day == "Afternoon") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length),
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100)
+
+yearly_bike_data %>%
+  group_by(user_type, time_of_day) %>%
+  filter(time_of_day == "Afternoon") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop",
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100) %>%
+  arrange(user_type, time_of_day)
+
+#-----evening-------
+
+yearly_bike_data %>%
+  group_by(time_of_day) %>%
+  filter(time_of_day == "Evening") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length),
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100)
+
+yearly_bike_data %>%
+  group_by(user_type, time_of_day) %>%
+  filter(time_of_day == "Evening") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop",
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100) %>%
+  arrange(user_type, time_of_day)
+
+#-----night-------
+
+yearly_bike_data %>%
+  group_by(time_of_day) %>%
+  filter(time_of_day == "Night") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length),
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100)
+
+
+yearly_bike_data %>%
+  group_by(user_type, time_of_day) %>%
+  filter(time_of_day == "Night") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop",
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100) %>%
+  arrange(user_type, time_of_day)
+
+
+#------------------Day of the Week----------------
+
+# Total rides
+
+yearly_bike_data %>%
+  count(day_of_week)
+
+# Average duration by day_of_week
+
+yearly_bike_data %>%
+  group_by(day_of_week) %>%
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length),
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100)
+
+# Total rides by user_type
+
+yearly_bike_data %>%
+  group_by(user_type) %>% 
+  count(day_of_week) %>%
+  print(n = 14) # Lets you view the entire tibble
+
 # Average duration by user_type and day_of_week
 
 yearly_bike_data %>%
@@ -420,263 +639,175 @@ yearly_bike_data %>%
 
 # Analysis in percentage
 
-yearly_bike_data %>% 
-  group_by(user_type) %>%
-  summarise(count = length(trip_id),
-            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100)
 yearly_bike_data %>%
   group_by(day_of_week) %>%
   summarise(count = length(trip_id),
             'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100,
             'casual_p' = (sum(user_type == 'casual')/length(trip_id))*100,
-            'member_p' = (sum(user_type == 'casual')/length(trip_id))*100,
+            'member_p' = (sum(user_type == 'member')/length(trip_id))*100,
             '% Difference' = member_p - casual_p)
+
+#---------------------MONTH-----------------------
+
+# Total rides
+
+yearly_bike_data %>%
+  group_by(month) %>%
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length))
+
+# Total rides by member type 
+
+yearly_bike_data %>%
+  group_by(user_type, month) %>%
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop") %>%
+  arrange(user_type, month) %>%
+  print( n = 24)
+
+# Analysis in percentage
+
 yearly_bike_data %>%
   group_by(month) %>%
   summarise(count = length(trip_id),
             'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100,
             'casual_p' = (sum(user_type == 'casual')/length(trip_id))*100,
-            'member_p' = (sum(user_type == 'casual')/length(trip_id))*100,
+            'member_p' = (sum(user_type == 'member')/length(trip_id))*100,
             '% Difference' = member_p - casual_p)
-
-# View the final data
-
-View(yearly_bike_data)
-
-#-----------------------------------------TOTAL RIDES--------------------------------------
-
-# Total number of rides
-
-nrow(yearly_bike_data)
-
-#-----------------MEMBER TYPE---------------------
-
-yearly_bike_data %>%
-  group_by(user_type) %>% 
-  count(user_type)
-
-#----------------TYPE OF BIKE---------------------
-
-# Total rides by member type 
-
-yearly_bike_data %>%
-  group_by(user_type, ride_type) %>% 
-  count(ride_type)
-
-# Total rides 
-
-yearly_bike_data %>%
-  group_by(ride_type) %>% 
-  count(ride_type)
-
-#-------------------HOUR--------------------------
-
-# Total rides by member type 
-
-yearly_bike_data %>%
-  group_by(user_type) %>% 
-  count(hour) %>% 
-  print(n = 48) #lets you view the entire tibble
-
-# Total rides
-
-yearly_bike_data %>%
-  count(hour) %>% 
-  print(n = 24) #lets you view the entire tibble
-
-#----------------DAY OF THE WEEK------------------
-
-# Total rides by member type
-
-yearly_bike_data %>%
-  group_by(user_type) %>% 
-  count(day_of_week)
-
-# Total rides 
-
-yearly_bike_data %>%
-  count(day_of_week)
-
-#----------------------TIME OF DAY-----------------------
-
-#-----morning-------
-# Total rides by member type 
-
-yearly_bike_data %>%
-  group_by(user_type) %>% 
-  filter(time_of_day == "Morning") %>% 
-  count(time_of_day)
-
-# Total rides
-
-yearly_bike_data %>%
-  filter(time_of_day == "Morning") %>% 
-  count(time_of_day)
-
-#-----afternoon-------
-# Total rides by member type 
-
-yearly_bike_data %>%
-  group_by(user_type) %>% 
-  filter(time_of_day == "Afternoon") %>% 
-  count(time_of_day)
-
-# Total rides 
-
-yearly_bike_data %>%
-  filter(time_of_day == "Afternoon") %>% 
-  count(time_of_day)
-
-#-----evening-------
-# Total rides by member type
-
-yearly_bike_data %>%
-  group_by(user_type) %>% 
-  filter(time_of_day == "Evening") %>% 
-  count(time_of_day)
-
-# Total rides
-
-yearly_bike_data %>%
-  filter(time_of_day == "Evening") %>% 
-  count(time_of_day)
-
-#-----night-------
-# Number of rides by member type
-
-yearly_bike_data %>%
-  group_by(user_type) %>% 
-  filter(time_of_day == "Night") %>% 
-  count(time_of_day)
-
-# Number of rides 
-
-yearly_bike_data %>%
-  filter(time_of_day == "Night") %>% 
-  count(time_of_day)
-
-#---all times of day----
-# Total rides by member type 
-
-yearly_bike_data %>%
-  group_by(user_type) %>% 
-  count(time_of_day)
-
-# Number of rides
-
-yearly_bike_data %>%
-  group_by(time_of_day) %>% 
-  count(time_of_day)
-
-#---------------------MONTH-----------------------
-
-# Total rides by member type 
-
-yearly_bike_data %>%
-  group_by(user_type) %>% 
-  count(month) %>% 
-  print(n = 24) #lets you view the entire tibble
-
-# Total rides
-yearly_bike_data %>%
-  count(month) 
 
 #----------------DAY OF THE MONTH-----------------
 
-# Total rides by member type
-
-yearly_bike_data %>%
-  group_by(user_type) %>% 
-  count(day) %>% 
-  print(n = 62) #lets you view the entire tibble
-
 # Total rides
 
 yearly_bike_data %>%
-  count(day) %>% 
-  print(n = 31) #lets you view the entire tibble
+  group_by(day) %>%
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), 
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100)
+
+# Total rides by member type
+
+yearly_bike_data %>%
+  group_by(user_type, day) %>%
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop", 
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100) %>%
+  arrange(user_type, day) %>%
+  print( n = 31)
 
 #--------------------SEASON-----------------------
 
-#-----spring-------
-
-# Total rides by member type 
-
-yearly_bike_data %>%
-  group_by(user_type) %>% 
-  filter(season == "Spring") %>% 
-  count(season)
-
-# Total rides
-
-yearly_bike_data %>%
-  filter(season == "Spring") %>% 
-  count(season)
-
-#-----summer-------
-
-# Total rides by member type
-
-yearly_bike_data %>%
-  group_by(user_type) %>% 
-  filter(season == "Summer") %>% 
-  count(season)
-
-# Total rides
-
-yearly_bike_data %>%
-  filter(season == "Summer") %>% 
-  count(season)
-
-#-----fall-------
-
-# Total rides by member type
-
-yearly_bike_data %>%
-  group_by(user_type) %>% 
-  filter(season == "Fall") %>% 
-  count(season)
-
-# Total rides
-
-yearly_bike_data %>%
-  filter(season == "Fall") %>% 
-  count(season)
-
-#-----winter-------
-
-# Total rides by member type
-yearly_bike_data %>%
-  group_by(user_type) %>% 
-  filter(season == "Winter") %>% 
-  count(season)
-
-# Total rides 
-yearly_bike_data %>%
-  filter(season == "Winter") %>% 
-  count(season)
-
 #-----all seasons-------
 
-# Total rides by member type
-yearly_bike_data %>%
-  group_by(season, user_type) %>% 
-  count(season)
+# Total rides by season
 
-# Total rides
 yearly_bike_data %>%
   group_by(season) %>% 
   count(season)
 
+# Average duration by season
+
+yearly_bike_data %>%
+  group_by(season) %>%
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop", 
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100)
+
+# Total rides by user_type
+
+yearly_bike_data %>%
+  group_by(season, user_type) %>% 
+  count(season)
+
+# Average duration by user_type and season
+
+yearly_bike_data %>%
+  group_by(user_type, season) %>%
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop", 
+            'Percentage' = (length(trip_id)/nrow(yearly_bike_data))*100) %>%
+  arrange(user_type, season)
+
+#-----spring-------
+
+yearly_bike_data %>%
+  group_by(season) %>%
+  filter(season == "Spring") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop")
+
+yearly_bike_data %>%
+  group_by(user_type, season) %>%
+  filter(season == "Spring") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop") %>%
+  arrange(user_type, season)
+
+#-----summer-------
+
+yearly_bike_data %>%
+  filter(season == "Summer") %>% 
+  count(season)
+
+# Average duration by season
+
+yearly_bike_data %>%
+  group_by(season) %>%
+  filter(season == "Summer") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop")
+
+yearly_bike_data %>%
+  group_by(user_type) %>% 
+  filter(season == "Summer") %>% 
+  count(season)
+
+# Average duration by user_type and season
+
+yearly_bike_data %>%
+  group_by(user_type, season) %>%
+  filter(season == "Summer") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop") %>%
+  arrange(user_type, season)
+
+#-----fall-------
+
+yearly_bike_data %>%
+  group_by(season) %>%
+  filter(season == "Fall") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop")
+
+yearly_bike_data %>%
+  group_by(user_type, season) %>%
+  filter(season == "Fall") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop") %>%
+  arrange(user_type, season)
+
+#-----winter-------
+
+yearly_bike_data %>%
+  group_by(season) %>%
+  filter(season == "Winter") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop")
+
+yearly_bike_data %>%
+  group_by(user_type, season) %>%
+  filter(season == "Winter") %>% 
+  summarise(number_of_rides = n(),
+            average_ride_length = mean(ride_length), .groups = "drop") %>%
+  arrange(user_type, season)
 
 
 
-# Step5 - Share Phase
-
-table(yearly_bike_data['user_type'])
-table(yearly_bike_data$ride_type)
+## Step5 - Share Phase
 
 # User distribution
+
+table(yearly_bike_data['user_type'])
 
 total_number_of_users <- c(59698, 77166)
 pie(total_number_of_users)
@@ -688,7 +819,8 @@ legend("bottomright", pie_labels, fill = colors)
 
 # Bike distribution
 
-table(yearly_bike_data['ride_type'])
+table(yearly_bike_data$ride_type)
+
 total_number_of_bikes <- c(97159, 11325, 28380)
 pie(total_number_of_bikes)
 pie_labels <- c("classic", "docked", "electric")
@@ -758,7 +890,13 @@ ggplot(yearly_bike_data, aes(x = ride_type, fill  = user_type)) +
 
 #  Weekday Trends
 
+yearly_bike_data %>%
+  group_by(day_of_week) %>% 
+  summarise(number_of_rides = n()) %>% 
+  ggplot(mapping = aes(x = day_of_week, y = number_of_rides)) + geom_col()
+
 # Ridership by weekday and user
+
 ggplot(yearly_bike_data, aes(x = day_of_week, fill  = user_type)) +
   geom_bar(position = "dodge") +
   ggtitle('Daily Ridership by User', subtitle = "June 2021 - May 2022") +
@@ -796,6 +934,11 @@ yearly_bike_data %>%
   count(season, user_type)
 
 # Season by user
+
+yearly_bike_data %>%
+  group_by(season) %>% 
+  summarise(number_of_rides = n()) %>% 
+  ggplot(mapping = aes(x = season, y = number_of_rides)) + geom_col()
 
 ggplot(yearly_bike_data, aes(x = season, fill  = user_type)) +
   geom_bar(position = "dodge") +
@@ -875,18 +1018,6 @@ ggplot(monthly_avg_duration,
   scale_fill_manual(values = c("#99cad5", "#3f93a2"),
                     labels = c("casual", "member"))
 
-# average trip duration by month and user_type (line graph)
-
-yearly_bike_data %>%
-  group_by(user_type, month) %>%
-  summarise(average_duration_min = mean(ride_length), .groups = "drop") %>%
-  arrange(user_type, month) %>%
-  ggplot(aes(x = month, y = average_duration_min, color = user_type)) +
-  geom_line(aes(group = user_type)) +
-  theme(axis.text.x = element_text(angle = 45)) +
-  labs(title = "Average Trip Duration by Month and user",
-       x = "Month", y = "Average Trip Duration (mins)", color = "user type")
-
 # Hourly trends
 
 # Popular start hours by user
@@ -900,6 +1031,7 @@ casual_start_hour <-
 casual_start_hour <- casual_start_hour %>%
   arrange(desc(n)) %>%
   slice_head(n = 10)
+
 print(casual_start_hour)
 
 member_start_hour <-
