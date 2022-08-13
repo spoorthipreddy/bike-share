@@ -15,11 +15,11 @@ The director of marketing of Cyclistic, Lily Moreno, believes that the company�
 
 Three questions will guide the future marketing campaign:
 
-1.How do annual members and casual riders use Cyclistic bikes differently?
+1. How do annual members and casual riders use Cyclistic bikes differently?
 
-2.Why would casual riders buy Cyclistic annual memberships?
+2. Why would casual riders buy Cyclistic annual memberships?
 
-3.How can Cyclistic use digital media to influence casual riders to become members?
+3. How can Cyclistic use digital media to influence casual riders to become members?
 
 I have been assigned by Moreno the first question. 
 
@@ -32,9 +32,9 @@ Cyclistic has concluded that annual members are much more profitable than casual
 
 * My key stakeholders are: 
 
-1-Lily Moreno: The director of marketing and my manager. Moreno has initiated   this  strategy. The first stakeholder to deliver to. 
+1. Lily Moreno: The director of marketing and my manager. Moreno has initiated   this  strategy. The first stakeholder to deliver to. 
 
-2-The executive team: For Moreno´s idea to work, the executive team must approve our recommendations, so so they must be backed up with compelling data insights and professional data visualizations.
+2. The executive team: For Moreno´s idea to work, the executive team must approve our recommendations, so so they must be backed up with compelling data insights and      professional data visualizations.
 
 
 ### The Prepare phase
@@ -83,52 +83,52 @@ Steps
 
 ### The Analyse Phase
 
-Key tasks
-- Aggregate your data so it’s useful and accessible.
+Key tasks -
 
-- Organize and format your data.
-1. Created new columns for:
+Aggregate your data so it’s useful and accessible.
 
-Start Time :- split start_time to date and time
-Ride Length :- did this by subtracting end_at time from start_at time
-Month
-Day
-Year
-Day of the Week
-Season :- Spring, Summer, Winter or Fall
-Hour
-Time of Day :- Night, Morning, Afternoon or Evening
+Organize and format your data.
 
-2. Cleaned the data by:
+- Created new columns for:
+1. Start Time :- split start_time to date and time
+2. Ride Length :- did this by subtracting end_at time from start_at time
+3. Month
+4. Day
+5. Year
+6. Day of the Week
+7. Season :- Spring, Summer, Winter or Fall
+8. Hour
+9. Time of Day :- Night, Morning, Afternoon or Evening
 
-- Remove unnecessary columns :- ride_id, start_station_id, end_station_id, start_lat, start_long, end_lat, end_lng
-- Remove where ride_length is 0 or negative (ride_length should be a positive number)
-- Remove rows with NA values (blank rows)
-- Removing duplicate rows
+-Cleaned the data by:
+1. Remove unnecessary columns :- ride_id, start_station_id, end_station_id, start_lat, start_long, end_lat, end_lng
+2. Remove where ride_length is 0 or negative (ride_length should be a positive number)
+3. Remove rows with NA values (blank rows)
+4. Removing duplicate rows
 
-- Perform calculations.
-1. Calculated Total Rides and Average Ride Length for:
+Perform calculations.
 
-Total number of rides which was just the row count
-Member type - casual riders vs. annual members
-Type of Bike - classic vs docked vs electric; separated by member type; total rides and average ride length for each bike type
-Hour - separated by member type; total rides and average ride length for each hour in a day
-Time of Day - separated by member type; total rides and average ride length for each time of day (morning, afternoon, evening, night)
-Day of the Week - separated by member type; total rides and average ride length for each day of the week
-Day of the Month - separated by member type; total rides and average ride length for each day of the month
-Month - separated by member type; total rides and average ride length for each month
-Season - separated by member type; total rides and average ride length for each season (spring, summer, fall, winter)
+- Calculated Total Rides and Average Ride Length for:
+1. Total number of rides which was just the row count
+2. Member type - casual riders vs. annual members
+3. Type of Bike - classic vs docked vs electric; separated by member type; total rides and average ride length for each bike type
+4. Hour - separated by member type; total rides and average ride length for each hour in a day
+5. Time of Day - separated by member type; total rides and average ride length for each time of day (morning, afternoon, evening, night)
+6. Day of the Week - separated by member type; total rides and average ride length for each day of the week
+7. Day of the Month - separated by member type; total rides and average ride length for each day of the month
+8. Month - separated by member type; total rides and average ride length for each month
+9. Season - separated by member type; total rides and average ride length for each season (spring, summer, fall, winter)
 
-- Identify trends and relationships.
+Identify trends and relationships.
 	
 
 ### The Share phase 
 
 Using the visulization created in R 
-- from the analysis these are my findings 
-	1- Number of rides for casual users is increased around the weekends.
-	2- The duration of rides is consistant for member users throughout the week.
-	3- Casual riders use the bikes for longer rides compared to member users.
+- From the analysis these are my findings 
+	1. Number of rides for casual users is increased around the weekends.
+	2. The duration of rides is consistant for member users throughout the week.
+	3. Casual riders use the bikes for longer rides compared to member users.
 
 #### Conclusions/Summary of insights 
 
@@ -143,12 +143,12 @@ Members and casual riders differ in how long they use the bikes, how often they 
 
 ### The Act Phase
 
-Based on my analysis these are my recommendations 
-	* Better deals for casual members around the weekend to get them to sign up for a membership 
-	* Introduce more options for people with disabilities
-  * Give discounts for longer rides when you have a membership
-  * Longer rides can get some type of rewards program when they become members
-  * The marketing campaign should be launched between February to August, as the number of trips made by casual riders peaks at this time of the year.
-  * The campaign could include ride-length-based tariff plan (maybe only on weekends): Bike more, pay less ! 
-    This provides more incentive for the member rides to cycle longer distances. 
-  * Alternatively, longer rides can be rewarded with benefits such as discount vouchers. 
+Based on my analysis these are my recommendations -
+* Better deals for casual members around the weekend to get them to sign up for a membership 
+* Introduce more options for people with disabilities
+* Give discounts for longer rides when you have a membership
+* Longer rides can get some type of rewards program when they become members
+* The marketing campaign should be launched between February to August, as the number of trips made by casual riders peaks at this time of the year.
+* The campaign could include ride-length-based tariff plan (maybe only on weekends): Bike more, pay less ! 
+  This provides more incentive for the member rides to cycle longer distances. 
+* Alternatively, longer rides can be rewarded with benefits such as discount vouchers. 
