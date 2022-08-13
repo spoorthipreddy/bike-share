@@ -70,7 +70,7 @@ Data Limitations: As riders’ personal identifiable information is hidden, thus
 I used R for data verification and cleaning: Reasons:
 The 12 data sets combined will contain more than 5 million rows of data. Excel worksheet limitation is 1,048,576 rows. Moreover, some csv files could not uploaded to BigQuery for file size problems. Thus, R is used to perform all tasks from organizing, cleaning analyzing and visualizing data.
 
-Steps
+Steps -
 
 1. Load all of the libraries I used: tidyverse, lubridate, hms, data.table
 
@@ -100,7 +100,7 @@ Organize and format your data.
 8. Hour
 9. Time of Day :- Night, Morning, Afternoon or Evening
 
--Cleaned the data by:
+- Cleaned the data by:
 1. Remove unnecessary columns :- ride_id, start_station_id, end_station_id, start_lat, start_long, end_lat, end_lng
 2. Remove where ride_length is 0 or negative (ride_length should be a positive number)
 3. Remove rows with NA values (blank rows)
